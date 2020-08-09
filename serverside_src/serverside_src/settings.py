@@ -47,9 +47,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'rest_framework', # 追加
-    'rest_framework.authtoken', # 追加
-    'frontside_src', # 追加
+    # 'rest_framework', # 追加
+    # 'rest_framework.authtoken', # 追加
+    # 'frontside_src', # 追加
 ]
 
 ROOT_URLCONF = 'serverside_src.urls'
