@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 // import Home from "../views/Home.vue";
 // import Calendar from "../components/Calendar.vue";
-import Slide from "../components/Slide.vue";
+import Main from "../components/Main.vue";
 
 Vue.use(VueRouter);
 
@@ -10,8 +10,8 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Slide
-  }
+    component: Main,
+  },
 ];
 
 const router = new VueRouter({
