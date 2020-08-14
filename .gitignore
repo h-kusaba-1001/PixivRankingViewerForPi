@@ -1,0 +1,4 @@
+serverside_src/.env
+serverside_src/__pycache__/*
+serverside_src/api/__pycache__/*
+serverside_src/serverside_src/__pycache__/*
