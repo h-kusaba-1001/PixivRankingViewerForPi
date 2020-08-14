@@ -3,12 +3,12 @@
 	v-show="loading"
 	:elevation="15"
 	style="height: auto; width:auto ;">
-	<v-overlay>
-    <v-progress-circular
-      :size="50"
-      color="primary"
-      indeterminate
-    ></v-progress-circular>
+    <v-overlay>
+			<v-progress-circular
+				:size="50"
+				color="primary"
+				indeterminate
+			></v-progress-circular>
 		</v-overlay>
   </div>
 </template>

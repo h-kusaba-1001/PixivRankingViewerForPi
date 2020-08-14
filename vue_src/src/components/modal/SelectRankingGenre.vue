@@ -40,7 +40,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue" text @click="submitBtnClicked()">決定</v-btn>
-      </v-card-actions> 
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -60,24 +60,27 @@
     },
     methods: {
       async submitBtnClicked() {
-        // ローディングをセット
-        this.$store.commit('set_loading')
-
         if(this.rankingGenre === "") {
           alert('ランキングを選択してください。')
           return false
         }
+
+        // ローディングをセット
+        this.$store.commit('set_loading')
         await this.axios.get('http://127.0.0.1:8000/get_pixiv_ranking?genre=' + this.rankingGenre)
           .then(() => {
-
             // ローディングを解除
             this.$store.commit('set_loading');
-            // モーダルを閉じて再読み込み
+            // モーダルを閉じる
             this.rankingGenreDialog = false;
+
           })
-          .catch(err=>(
-            console.log("Error Occurred!",err)
-          ))
+          .catch(err=> {
+            alert('通信エラーが発生しました。');
+            console.log("Error Occurred!",err);
+          });
+          // 再度スライドショーを描画
+          this.$router.go('/')
       }
     }
   }

@@ -15,20 +15,26 @@
 
 <script>
   export default {
-    beforeCreate() {
-
-      this.axios.get('http://127.0.0.1:8000/get_filepaths')
+    data() {
+      return {
+        items: []
+      }
+    },
+    methods: {
+      async getPics() {
+        let items = []
+        await this.axios.get('http://127.0.0.1:8000/get_filepaths')
         .then(response => {
-          this.items = response.data.filepaths
+          items = response.data.filepaths
         })
         .catch(err=>(
           console.log("axiosGetErr",err)
         ))
-    },
-    data () {
-      return {
-        items: [],
+        this.items = items
       }
+    },
+    created() {
+      this.getPics();
     },
   }
 </script>
