@@ -13,8 +13,6 @@ import shutil
 from time import sleep
 from pprint import pprint
 
-
-
 PIXIV_ID = os.environ["PIXIV_ID"]
 PIXIV_PASSWORD = os.environ["PIXIV_PASSWORD"]
 GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
@@ -22,10 +20,9 @@ GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
 obj_datetime = datetime.datetime.now()
 str_now = obj_datetime.strftime('%y%m%d')
 
-# TARGET_PATH = '../vue_src/public/pixiv_img/' + str_now + '/'
-TARGET_PATH = '../vue_src/public/pixiv_img/'
-# PUBLIC_PATH = '../pixiv_img/' + str_now + '/'
 PUBLIC_PATH = '../pixiv_img/'
+TARGET_PATH = '../vue_src/public/pixiv_img/'
+TEMP_PATH = './temp/pixiv_img/'
 
 def getDirectory(request):
     """
@@ -45,27 +42,10 @@ def getPixivRanking(request):
     pixivpyから、ランキングの画像を取得する
     """
 
-    # ディレクトリが存在する場合は中身を作成する
-    if os.path.exists(TARGET_PATH):
-        shutil.rmtree(TARGET_PATH)
-        # 実際にディレクトリがなくなるまで待つ
-        # while os.path.exists(TARGET_PATH):
-        #     pass
-        # どうしても上手くいかないのでsleep(3)
-        sleep(3)
-
     # ディレクトリを作成
-    os.mkdir(TARGET_PATH)
-
-    # dst_path = 'pi_pixiv_calender/temp/img'
-    # mkdirExceptExist = lambda path: "" if os.path.exists(path) else os.makedirs(path)
-
-    # for img_file in os.listdir(dst_path):
-    #     # print(dst_path + '/' +  img_file)
-    #     os.remove(dst_path + '/' + img_file)
-
-    # AAPI = pixivpy3.AppPixivAPI()
-    # AAPI.login(PIXIV_ID, PIXIV_PASSWORD)
+    if os.path.exists(TEMP_PATH):
+        shutil.rmtree(TEMP_PATH)
+    os.mkdir(TEMP_PATH)
 
     PAPI = pixivpy3.PixivAPI()
     PAPI.login(PIXIV_ID, PIXIV_PASSWORD)
@@ -81,26 +61,29 @@ def getPixivRanking(request):
         rank_no = str(illust.rank) if len(str(illust.rank)) > 1 else "0" + str(illust.rank)
 
         if illust.work.page_count == 1:
-            # file_name = rank_no + '_' + file_title + ".jpg"
             pprint(illust.id)
             pprint(illust.work.image_urls)
 
             # ファイル名 = 作品ID_ページ番号.jpg
             file_name = rank_no + '_' +  str(illust.work.id) + '.jpg'
-            PAPI.download(illust.work.image_urls.px_480mw, path=TARGET_PATH, name=file_name)
+            PAPI.download(illust.work.image_urls.px_480mw, path=TEMP_PATH, name=file_name)
 
         else:
             page_infos = PAPI.works(illust.work.id)
             for page_no in range(0, page_infos.response[0].page_count):
-                # if page_no < 3:
-                    # file_name = rank_no + '_' +  file_title + '_' + str(page_no + 1) + ".jpg"
-
                 # ファイル名 = ランキング順位_作品ID_ページ番号.jpg
                 file_name = rank_no + '_' + str(illust.work.id) + '_' + str(page_no + 1) + '.jpg'
                 page_info = page_infos.response[0].metadata.pages[page_no]
-                PAPI.download(page_info.image_urls.px_480mw, path=TARGET_PATH, name=file_name)
+                PAPI.download(page_info.image_urls.px_480mw, path=TEMP_PATH, name=file_name)
 
-        # print(illust.work.title + ' https://www.pixiv.net/artworks/' + str(illust.work.id))
+    # ディレクトリが存在する場合は中身を作成する
+    if os.path.exists(TARGET_PATH):
+        shutil.rmtree(TARGET_PATH)
+        # 実際にディレクトリがなくなるまで待つ
+        # どうしても上手くいかないのでsleep
+        sleep(1.5)
 
-    # return render(request, 'pi_pixiv_calender/index.html')
+    # 一時ディレクトリから移動してリネーム
+    shutil.move(TEMP_PATH, TARGET_PATH.replace('pixiv_img/', ''))
+
     return JsonResponse({'status': 'OK!'})
