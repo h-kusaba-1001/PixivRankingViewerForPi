@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from django.http import JsonResponse
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
 
 import os
 import pathlib
@@ -11,14 +12,19 @@ from django.conf import settings
 import datetime
 import shutil
 from time import sleep
+import json
+import tweepy as tw
 from pprint import pprint
+
 
 PIXIV_ID = os.environ["PIXIV_ID"]
 PIXIV_PASSWORD = os.environ["PIXIV_PASSWORD"]
-GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
+TWITTER_API_KEY=os.environ["TWITTER_KEY"]
+TWITTER_API_SERCRET_KEY=os.environ["TWITTER_SECRET_KEY"]
+TWITTER_API_ACCESS_TOKEN=os.environ["TWITTER_ACCESS_TOKEN"]
+TWITTER_API_SERCRET_TOKEN=os.environ["TWITTER_TOKEN_SECRET"]
 
-obj_datetime = datetime.datetime.now()
-str_now = obj_datetime.strftime('%y%m%d')
+GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
 
 PUBLIC_PATH = '../pixiv_img/'
 TARGET_PATH = '../vue_src/public/pixiv_img/'
@@ -50,6 +56,10 @@ def getPixivRanking(request):
     PAPI = pixivpy3.PixivAPI()
     PAPI.login(PIXIV_ID, PIXIV_PASSWORD)
 
+    # TODO 見直す
+    if request.GET.get("genre") == None:
+        return JsonResponse({'status': 'Error'})
+
     ranking_genre = request.GET.get("genre")
 
     # ランキングを取得
@@ -61,9 +71,6 @@ def getPixivRanking(request):
         rank_no = str(illust.rank) if len(str(illust.rank)) > 1 else "0" + str(illust.rank)
 
         if illust.work.page_count == 1:
-            pprint(illust.id)
-            pprint(illust.work.image_urls)
-
             # ファイル名 = 作品ID_ページ番号.jpg
             file_name = rank_no + '_' +  str(illust.work.id) + '.jpg'
             PAPI.download(illust.work.image_urls.px_480mw, path=TEMP_PATH, name=file_name)
@@ -87,3 +94,45 @@ def getPixivRanking(request):
     shutil.move(TEMP_PATH, TARGET_PATH.replace('pixiv_img/', ''))
 
     return JsonResponse({'status': 'OK!'})
+
+@csrf_exempt
+def tweet(request):
+    # 取得したキーとアクセストークンを設定する
+    auth = tw.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SERCRET_KEY)
+    auth.set_access_token(TWITTER_API_ACCESS_TOKEN, TWITTER_API_SERCRET_TOKEN)
+
+    api = tw.API(auth)
+
+    json_dict = json.loads(request.body)
+    tweet_content = json_dict['tweet']
+
+    # txt = "テスト投稿です。ｲｪｰｲ"
+    api.update_status(tweet_content)
+
+    return JsonResponse({'status': 'OK!'})
+
+@csrf_exempt
+def getPixivInfo(request):
+    PAPI = pixivpy3.PixivAPI()
+    PAPI.login(PIXIV_ID, PIXIV_PASSWORD)
+
+    if request.GET.get("illust_id") == None:
+        pass
+
+    illust_id = request.GET.get("illust_id")
+
+    pprint(illust_id)
+    illust_infos = PAPI.works(int(illust_id))
+
+    raw_illust_info = illust_infos.response[0]
+
+    title = raw_illust_info.title
+    author_name = raw_illust_info.user.name
+    url = 'https://www.pixiv.net/artworks/' + str(illust_id)
+
+    _dict = {'title': title, 'author_name': author_name, 'url': url}
+    txt = '{title} | {author_name} #pixiv #PixivRankingViewer \r\n{url}'
+
+    illust_info = txt.format(**_dict)
+
+    return JsonResponse({'illust_info': illust_info})
