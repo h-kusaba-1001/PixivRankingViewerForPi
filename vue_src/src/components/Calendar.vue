@@ -40,30 +40,30 @@ export default {
   </div>
 </template>
 
-
 <style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-    html, body {
-        height: 100vh;
-    }
-     body {
-        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-        font-size: 14px;
-     }
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100vh;
+}
+body {
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
 </style>
 
 <style scoped>
-    #app {
-        display: flex;
-        overflow: hidden;
-        height: 100%;
-    }
-    .calendar {
-        flex: 1;
-        padding: 2em;
-    }
+#app {
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+.calendar {
+  flex: 1;
+  padding: 2em;
+}
 </style>

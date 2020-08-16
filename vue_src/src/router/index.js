@@ -10,12 +10,12 @@ const routes = [
   {
     path: "/",
     name: "Main",
-    component: Main,
-  },
+    component: Main
+  }
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   routes
 });
 
