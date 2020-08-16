@@ -64,7 +64,6 @@ export default {
       await this.axios
         .get("http://127.0.0.1:8000/get_pixiv_info?illust_id=" + articleId)
         .then(response => {
-          // console.log(response.data.illust_info)
           this.tweetDraft = response.data.illust_info;
         })
         .catch(err => console.log("axiosGetErr", err));

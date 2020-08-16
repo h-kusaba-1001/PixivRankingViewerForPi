@@ -62,6 +62,7 @@ def getPixivRanking(request):
 
     ranking_genre = request.GET.get("genre")
 
+    # TODO クラスメソッド化
     # ランキングを取得
     json_result = PAPI.ranking_all(mode=ranking_genre, page=1, per_page=GET_PICS_NUM, date=None)
 
@@ -97,6 +98,7 @@ def getPixivRanking(request):
 
 @csrf_exempt
 def tweet(request):
+    # TODO クラスメソッド化
     # 取得したキーとアクセストークンを設定する
     auth = tw.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SERCRET_KEY)
     auth.set_access_token(TWITTER_API_ACCESS_TOKEN, TWITTER_API_SERCRET_TOKEN)
@@ -113,6 +115,7 @@ def tweet(request):
 
 @csrf_exempt
 def getPixivInfo(request):
+    # TODO クラスメソッド化
     PAPI = pixivpy3.PixivAPI()
     PAPI.login(PIXIV_ID, PIXIV_PASSWORD)
 

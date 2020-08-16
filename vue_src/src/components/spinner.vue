@@ -19,6 +19,7 @@
 export default {
   name: "App",
   computed: {
+    // TODO Vuexを使わずに親子での受け渡しとする
     loading() {
       return this.$store.state.loading;
     }
