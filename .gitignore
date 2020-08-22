@@ -3,4 +3,5 @@ serverside_src/__pycache__/*
 serverside_src/api/__pycache__/*
 serverside_src/serverside_src/__pycache__/*
 serverside_src/temp/*
+!serverside_src/temp/.gitkeep
 vue_src/public/pixiv_img

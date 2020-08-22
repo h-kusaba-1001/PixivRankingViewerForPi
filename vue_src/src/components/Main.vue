@@ -2,7 +2,6 @@
   <v-carousel
     :interval="10000"
     :hide-delimiters="true"
-    :show-arrows="false"
     :change="slideItemChanged()"
     height="550"
     v-model="slideNo"
