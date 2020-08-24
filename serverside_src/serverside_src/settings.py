@@ -138,4 +138,4 @@ STATICFILES_DIRS = [
 ]
 
 # pixivpy向けの定数
-GET_PICS_NUM = 30 # 取得するランキング数
+GET_PICS_NUM = 10 # 取得するランキング数
