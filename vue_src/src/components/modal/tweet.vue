@@ -56,7 +56,7 @@ export default {
       // TODO: this.$props.picsが空の場合は返す
       let imgPath = this.$props.pics[this.$props.slideItemNo];
       let imgFileName = imgPath
-        .replace("../pixiv_img/", "")
+        .replace("/static/pixiv_img/", "")
         .replace(".jpg", "")
         .split("_");
       // pixivの作品IDを取得

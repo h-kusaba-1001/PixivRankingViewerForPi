@@ -1,7 +1,11 @@
 serverside_src/.env
 serverside_src/__pycache__/*
 serverside_src/api/__pycache__/*
+serverside_src/api/migrations/__pycache__/*
+serverside_src/api/templates/api/index.html
 serverside_src/serverside_src/__pycache__/*
-serverside_src/temp/*
-!serverside_src/temp/.gitkeep
-vue_src/public/pixiv_img
+serverside_src/serverside_src/__pycache__/*
+serverside_src/static/css/*
+serverside_src/static/js/*
+serverside_src/static/pixiv_img/*
+serverside_src/favicon.ico

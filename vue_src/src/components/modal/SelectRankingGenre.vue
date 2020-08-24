@@ -48,6 +48,9 @@
 import spinner from "../spinner.vue";
 
 export default {
+  props: {
+    pics: Array
+  },
   components: {
     spinner
   },
@@ -63,6 +66,8 @@ export default {
         alert("ランキングを選択してください。");
         return false;
       }
+      // picsを空にする
+      this.$emit('pics', [])
 
       // ローディングをセット
       this.$store.commit("set_loading");
