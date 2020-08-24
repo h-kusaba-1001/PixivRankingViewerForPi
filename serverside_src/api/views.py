@@ -15,6 +15,7 @@ from time import sleep
 import json
 import tweepy as tw
 from pprint import pprint
+from time import sleep
 
 
 PIXIV_ID = os.environ["PIXIV_ID"]
@@ -85,6 +86,8 @@ def getPixivRanking(request):
                 file_name = rank_no + '_' + str(illust.work.id) + '_' + str(page_no + 1) + '.jpg'
                 page_info = page_infos.response[0].metadata.pages[page_no]
                 PAPI.download(page_info.image_urls.px_480mw, path=TARGET_PATH, name=file_name)
+
+        sleep(2)
 
     return JsonResponse({'status': 'OK!'})
 
