@@ -26,9 +26,11 @@ TWITTER_API_SERCRET_TOKEN=os.environ["TWITTER_API_SERCRET_TOKEN"]
 
 GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
 
-PUBLIC_PATH = '../pixiv_img/'
-TARGET_PATH = '../vue_src/public/pixiv_img/'
-TEMP_PATH = './temp/pixiv_img/'
+PUBLIC_PATH = '/static/pixiv_img/'
+TARGET_PATH = 'static/pixiv_img/'
+
+def index(request):
+    return render(request, 'api/index.html')
 
 def getDirectory(request):
     """
@@ -49,9 +51,9 @@ def getPixivRanking(request):
     """
 
     # ディレクトリを作成
-    if os.path.exists(TEMP_PATH):
-        shutil.rmtree(TEMP_PATH)
-    os.mkdir(TEMP_PATH)
+    if os.path.exists(TARGET_PATH):
+        shutil.rmtree(TARGET_PATH)
+    os.mkdir(TARGET_PATH)
 
     PAPI = pixivpy3.PixivAPI()
     PAPI.login(PIXIV_ID, PIXIV_PASSWORD)
@@ -74,7 +76,7 @@ def getPixivRanking(request):
         if illust.work.page_count == 1:
             # ファイル名 = 作品ID_ページ番号.jpg
             file_name = rank_no + '_' +  str(illust.work.id) + '.jpg'
-            PAPI.download(illust.work.image_urls.px_480mw, path=TEMP_PATH, name=file_name)
+            PAPI.download(illust.work.image_urls.px_480mw, path=TARGET_PATH, name=file_name)
 
         else:
             page_infos = PAPI.works(illust.work.id)
@@ -82,17 +84,7 @@ def getPixivRanking(request):
                 # ファイル名 = ランキング順位_作品ID_ページ番号.jpg
                 file_name = rank_no + '_' + str(illust.work.id) + '_' + str(page_no + 1) + '.jpg'
                 page_info = page_infos.response[0].metadata.pages[page_no]
-                PAPI.download(page_info.image_urls.px_480mw, path=TEMP_PATH, name=file_name)
-
-    # ディレクトリが存在する場合は中身を作成する
-    if os.path.exists(TARGET_PATH):
-        shutil.rmtree(TARGET_PATH)
-        # 実際にディレクトリがなくなるまで待つ
-        # どうしても上手くいかないのでsleep
-        sleep(1.5)
-
-    # 一時ディレクトリから移動してリネーム
-    shutil.move(TEMP_PATH, TARGET_PATH.replace('pixiv_img/', ''))
+                PAPI.download(page_info.image_urls.px_480mw, path=TARGET_PATH, name=file_name)
 
     return JsonResponse({'status': 'OK!'})
 
@@ -124,7 +116,7 @@ def getPixivInfo(request):
 
     illust_id = request.GET.get("illust_id")
 
-    pprint(illust_id)
+    # pprint(illust_id)
     illust_infos = PAPI.works(int(illust_id))
 
     raw_illust_info = illust_infos.response[0]
