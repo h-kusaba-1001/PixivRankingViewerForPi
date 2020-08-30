@@ -1,9 +1,10 @@
 <template>
+  <!-- TODO:サイズの定数化 -->
   <v-carousel
-    :interval="10000"
+    :interval="1000"
     :hide-delimiters="true"
     :change="slideItemChanged()"
-    height="550"
+    height="980"
     v-model="slideNo"
   >
     <v-carousel-item
@@ -54,6 +55,7 @@ export default {
   background-color: #272727 !important;
 }
 .v-image__image--cover {
-  background-size: auto 100% !important;
+  /* 縦画面向けの対応 */
+  background-size: 100% auto !important;
 }
 </style>

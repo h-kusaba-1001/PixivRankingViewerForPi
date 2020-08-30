@@ -1,7 +1,8 @@
 <template>
   <v-app>
     <v-main>
-      <v-toolbar dark max-height="60" min-height="60">
+      <!-- TODO:サイズの定数化 -->
+      <v-toolbar dark max-height="64" min-height="64">
         <v-toolbar-title>Pixiv Ranking Viewer</v-toolbar-title>
         <v-spacer></v-spacer>
         <tweet v-bind:pics="pics" v-bind:slideItemNo="slideItemNo"></tweet>
