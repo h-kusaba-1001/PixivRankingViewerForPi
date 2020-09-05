@@ -27,6 +27,7 @@ TWITTER_API_SERCRET_TOKEN=os.environ["TWITTER_API_SERCRET_TOKEN"]
 
 GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
 
+# TODO:ヘルパ関数staticを使用する
 PUBLIC_PATH = '/static/pixiv_img/'
 TARGET_PATH = 'static/pixiv_img/'
 
