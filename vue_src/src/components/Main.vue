@@ -1,7 +1,8 @@
 <template>
   <!-- TODO:サイズの定数化 -->
   <v-carousel
-    :interval="1000"
+    :cycle="true"
+    :interval="30000"
     :hide-delimiters="true"
     :change="slideItemChanged()"
     height="980"
