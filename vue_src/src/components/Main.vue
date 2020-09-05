@@ -1,10 +1,13 @@
 <template>
   <!-- TODO:サイズの定数化 -->
   <v-carousel
-    :interval="1000"
+    :cycle="true"
+    :interval="30000"
+    :progress="true"
+    :show-arrows="false"
     :hide-delimiters="true"
     :change="slideItemChanged()"
-    height="980"
+    height="960"
     v-model="slideNo"
   >
     <v-carousel-item
@@ -58,4 +61,7 @@ export default {
   /* 縦画面向けの対応 */
   background-size: 100% auto !important;
 }
+::-webkit-scrollbar {
+      display: none;
+   }
 </style>

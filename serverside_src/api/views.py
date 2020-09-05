@@ -25,8 +25,11 @@ TWITTER_API_SERCRET_KEY=os.environ["TWITTER_API_SERCRET_KEY"]
 TWITTER_API_ACCESS_TOKEN=os.environ["TWITTER_API_ACCESS_TOKEN"]
 TWITTER_API_SERCRET_TOKEN=os.environ["TWITTER_API_SERCRET_TOKEN"]
 
+# TODO:設定系の定数は別のyaml等から取得する
 GET_PICS_NUM = getattr(settings, "GET_PICS_NUM", None)
+INTERVAL_TIME = 1
 
+# TODO:ヘルパ関数staticを使用する
 PUBLIC_PATH = '/static/pixiv_img/'
 TARGET_PATH = 'static/pixiv_img/'
 
@@ -87,7 +90,7 @@ def getPixivRanking(request):
                 page_info = page_infos.response[0].metadata.pages[page_no]
                 PAPI.download(page_info.image_urls.px_480mw, path=TARGET_PATH, name=file_name)
 
-        sleep(2)
+        sleep(INTERVAL_TIME)
 
     return JsonResponse({'status': 'OK!'})
 
@@ -103,7 +106,6 @@ def tweet(request):
     json_dict = json.loads(request.body)
     tweet_content = json_dict['tweet']
 
-    # txt = "テスト投稿です。ｲｪｰｲ"
     api.update_status(tweet_content)
 
     return JsonResponse({'status': 'OK!'})
@@ -119,7 +121,6 @@ def getPixivInfo(request):
 
     illust_id = request.GET.get("illust_id")
 
-    # pprint(illust_id)
     illust_infos = PAPI.works(int(illust_id))
 
     raw_illust_info = illust_infos.response[0]
@@ -128,8 +129,9 @@ def getPixivInfo(request):
     author_name = raw_illust_info.user.name
     url = 'https://www.pixiv.net/artworks/' + str(illust_id)
 
+    # TODO:メッセージをyamlから取り出すようにする
     _dict = {'title': title, 'author_name': author_name, 'url': url}
-    txt = '{title} | {author_name} #pixiv #PixivRankingViewer \r\n{url}'
+    txt = '{title} | {author_name} #pixiv \r\n #PixivRankingViewer でラズパイからPixivを見てみよう\r\n{url}'
 
     illust_info = txt.format(**_dict)
 
