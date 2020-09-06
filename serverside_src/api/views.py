@@ -16,7 +16,7 @@ import json
 import tweepy as tw
 from pprint import pprint
 from time import sleep
-
+from natsort import natsorted
 
 PIXIV_ID = os.environ["PIXIV_ID"]
 PIXIV_PASSWORD = os.environ["PIXIV_PASSWORD"]
@@ -44,8 +44,7 @@ def getDirectory(request):
     l = []
     if os.path.exists(TARGET_PATH):
         l = [PUBLIC_PATH + p  for p in os.listdir(TARGET_PATH)]
-
-    # pprint(l)
+        l = natsorted(l)
 
     return JsonResponse({'filepaths': l})
 
